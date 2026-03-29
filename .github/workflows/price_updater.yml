@@ -2,12 +2,14 @@ name: 価格自動更新（2時間ごと）
 
 on:
   schedule:
-    - cron: '0 */2 * * *'
+    - cron: '0 */2 * * *'  # 2時間ごと
   workflow_dispatch:
 
 jobs:
   update-prices:
     runs-on: ubuntu-latest
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
