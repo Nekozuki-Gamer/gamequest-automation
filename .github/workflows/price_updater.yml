@@ -1,0 +1,21 @@
+name: 価格自動更新（2時間ごと）
+
+on:
+  schedule:
+    - cron: '0 */2 * * *'
+  workflow_dispatch:
+
+jobs:
+  update-prices:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install requests firebase-admin
+      - name: 価格自動更新実行
+        env:
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+          STEAM_API_KEY: ${{ secrets.STEAM_API_KEY }}
+        run: python gamequest-automation/scripts/price_updater.py
