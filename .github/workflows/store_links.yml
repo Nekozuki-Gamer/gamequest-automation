@@ -1,0 +1,21 @@
+name: ストアリンク自動付与（毎日1回）
+
+on:
+  schedule:
+    - cron: '0 1 * * *'  # JST 10:00 (UTC 01:00)
+  workflow_dispatch:
+
+jobs:
+  update-store-links:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install requests firebase-admin
+      - name: ストアリンク自動付与実行
+        env:
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+          STEAM_API_KEY: ${{ secrets.STEAM_API_KEY }}
+        run: python gamequest-automation/scripts/store_links.py
